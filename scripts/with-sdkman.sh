@@ -16,3 +16,6 @@ if [[ -s "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
 fi
 
 exec "$@"
+## A wrapper (or "shim") which prepares the environment
+## "$@" is a special variable in bash that represents all the arguments passed to the script.
+## Then with `exec`, the PID of the script is taken over by the "$@" command,

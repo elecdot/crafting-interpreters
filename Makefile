@@ -27,6 +27,10 @@ run-clox: clox
 test-clox: clox
 	@./scripts/test-clox.sh
 
+## Comment in Makefile:
+## - Do not write `# ...` in Recipe, because it is treated as a comment in shell script.
+## - Becareful with `target = build # ...` in scripts, because the target will become "build " (with space).
+## with-sdkman.sh is a wrapper to prepare environment with SDKMAN. (see with-sdkman.sh:19)
 jlox:
 	@mkdir -p build/jlox
 	@./scripts/with-sdkman.sh javac -d build/jlox $$(find jlox/src/main/java -name '*.java' | sort)

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+## -e: Exit on Error
+## -u: Treat Unset Variables as an Error
+## -o pipefail: Return the Exit Status (instead of passing exit code) of the Last Command in the Pipeline that Failed
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -8,8 +11,8 @@ if [[ -s "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
   # Load SDKMAN and apply the project-local Java version when .sdkmanrc is present.
   # Suppress SDKMAN's offline warning noise in the standard environment report.
   export SDKMAN_OFFLINE_MODE=true
-  set +u
-  # shellcheck disable=SC1091
+  set +u ## Safe if you source a third-party script that doesn't written with strict mode in mind.
+  # shellcheck disable=SC1091 ## Ignore "not found" error in shellcheck.
   source "${HOME}/.sdkman/bin/sdkman-init.sh"
   if [[ -f "${ROOT_DIR}/.sdkmanrc" ]]; then
     sdk env >/dev/null
@@ -19,6 +22,9 @@ fi
 
 print_tool() {
   local tool="$1"
+  ## > /dev/null: redirect stdout to /dev/null (discard output)
+  ## 2>&1: redirect stderr to stdout (combine stdout and stderr), so that both are discarded.
+  ## Exit code is passed by Process to the caller, not the output
   if command -v "$tool" >/dev/null 2>&1; then
     printf "%-8s %s\n" "$tool" "OK ($(command -v "$tool"))"
   else
